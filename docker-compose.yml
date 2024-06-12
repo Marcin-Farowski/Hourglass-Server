@@ -1,6 +1,7 @@
+name: hourglass-server
 services:
   db:
-    container_name: "db_postgres"
+    container_name: "hourglass-db-postgres"
     image: postgres:16.3
     volumes:
       - db_data:/var/lib/postgresql/data
@@ -11,3 +12,4 @@ services:
       - 5432:5432
 volumes:
   db_data:
+    name: hourglass-db-data
