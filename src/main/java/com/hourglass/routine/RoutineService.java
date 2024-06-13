@@ -1,6 +1,7 @@
 package com.hourglass.routine;
 
 import com.hourglass.exception.ResourceNotFound;
+import com.hourglass.user.User;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -14,12 +15,7 @@ public class RoutineService {
         this.routineDao = routineDao;
     }
 
-    public List<Routine> getAllRoutines() {
-        return routineDao.selectAllRoutines();
-    }
-
-    public Routine getRoutine(Integer id) {
-        return routineDao.selectRoutineById(id)
-                .orElseThrow(() -> new ResourceNotFound("Routine with id " + id + " not found"));
+    public List<Routine> getRoutinesByUser(User user) {
+        return routineDao.selectRoutinesByUser(user);
     }
 }

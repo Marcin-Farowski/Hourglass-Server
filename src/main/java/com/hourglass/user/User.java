@@ -1,5 +1,6 @@
 package com.hourglass.user;
 
+import com.hourglass.routine.Routine;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -23,17 +24,25 @@ public class User implements UserDetails {
     @Id
     @GeneratedValue
     private Integer id;
+
     @Column(nullable = false)
     private String firstName;
+
     @Column(nullable = false)
     private String lastName;
+
     @Column(nullable = false)
     private String email;
+
     @Column(nullable = false)
     private String password;
+
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private Role role;
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Routine> routines;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

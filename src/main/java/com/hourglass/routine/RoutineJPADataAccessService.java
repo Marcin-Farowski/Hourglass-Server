@@ -1,5 +1,6 @@
 package com.hourglass.routine;
 
+import com.hourglass.user.User;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -15,8 +16,8 @@ public class RoutineJPADataAccessService implements RoutineDao {
     }
 
     @Override
-    public List<Routine> selectAllRoutines() {
-        return routineRepository.findAll();
+    public List<Routine> selectRoutinesByUser(User user) {
+        return routineRepository.findByUser(user);
     }
 
     @Override
