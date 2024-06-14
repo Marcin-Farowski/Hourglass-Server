@@ -30,6 +30,9 @@ public class Routine {
     @Column(nullable = false)
     private TimeInterval renewalInterval;
 
+    @Column(nullable = false)
+    private boolean isCompleted;
+
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
     @JsonIgnore

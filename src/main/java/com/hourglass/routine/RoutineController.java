@@ -4,9 +4,7 @@ import com.hourglass.user.User;
 import com.hourglass.user.UserRepository;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -28,6 +26,16 @@ public class RoutineController {
         String email = userDetails.getUsername();
         User user = userRepository.findByEmail(email).orElseThrow(() -> new RuntimeException("User not found"));
         return routineService.getRoutinesByUser(user);
+    }
+
+    @PostMapping("/{id}/complete")
+    public Routine completeRoutine(@PathVariable Long id) {
+        return routineService.completeRoutine(id);
+    }
+
+    @PostMapping("/{id}/reset")
+    public Routine resetRoutine(@PathVariable Long id) {
+        return routineService.resetRoutine(id);
     }
 
 }
