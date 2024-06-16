@@ -28,14 +28,14 @@ public class RoutineController {
         return routineService.getRoutinesByUser(user);
     }
 
-    @PostMapping("/{id}/complete")
-    public Routine completeRoutine(@PathVariable Long id) {
-        return routineService.completeRoutine(id);
-    }
-
-    @PostMapping("/{id}/reset")
-    public Routine resetRoutine(@PathVariable Long id) {
-        return routineService.resetRoutine(id);
-    }
+//    @PostMapping("/{id}/complete")
+//    public Routine completeRoutine(@PathVariable Long id) {
+//        return routineService.completeRoutine(id);
+//    }
+//
+//    @PostMapping("/{id}/reset")
+//    public Routine resetRoutine(@PathVariable Long id) {
+//        return routineService.resetRoutine(id);
+//    }
 
 }

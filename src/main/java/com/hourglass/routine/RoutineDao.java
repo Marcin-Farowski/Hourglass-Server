@@ -7,5 +7,5 @@ import java.util.Optional;
 
 public interface RoutineDao {
     List<Routine> selectRoutinesByUser(User user);
-    Optional<Routine> selectRoutineById(int id);
+    Optional<Routine> selectRoutineById(Long id);
 }

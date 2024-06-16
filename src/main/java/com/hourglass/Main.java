@@ -1,6 +1,7 @@
 package com.hourglass;
 
 import com.hourglass.routine.Routine;
+import com.hourglass.routine.RoutineExecution;
 import com.hourglass.routine.RoutineRepository;
 import com.hourglass.routine.TimeInterval;
 import com.hourglass.user.Role;
@@ -68,27 +69,42 @@ public class Main {
         List<Routine> routines = new ArrayList<>();
 
         if (user.getEmail().equals("john.doe@example.com")) {
-            routines.add(new Routine("Morning Jogging", LocalDateTime.now().plusDays(1).withHour(6).withMinute(0), new TimeInterval(0, 0, 1, 0, 0, 0), user));
-            routines.add(new Routine("Read a Book", LocalDateTime.now().plusDays(1).withHour(18).withMinute(0), new TimeInterval(0, 0, 1, 0, 0, 0), user));
-            routines.add(new Routine("Team Meeting", LocalDateTime.now().plusDays(1).withHour(9).withMinute(0), new TimeInterval(0, 0, 0, 7, 0, 0), user));
-            routines.add(new Routine("Grocery Shopping", LocalDateTime.now().plusDays(1).withHour(17).withMinute(0), new TimeInterval(0, 0, 0, 7, 0, 0), user));
-            routines.add(new Routine("Monthly Report", LocalDateTime.now().plusDays(1).withHour(10).withMinute(0), new TimeInterval(0, 0, 0, 0, 1, 0), user));
+            routines.add(new Routine("Morning Jogging", LocalDateTime.now().minusDays(14).withHour(6).withMinute(0), new TimeInterval(0, 0, 1, 0, 0, 0), user));
+            routines.add(new Routine("Read a Book", LocalDateTime.now().minusDays(14).withHour(18).withMinute(0), new TimeInterval(0, 0, 1, 0, 0, 0), user));
+            routines.add(new Routine("Team Meeting", LocalDateTime.now().minusDays(14).withHour(9).withMinute(0), new TimeInterval(0, 0, 0, 7, 0, 0), user));
+            routines.add(new Routine("Grocery Shopping", LocalDateTime.now().minusDays(14).withHour(17).withMinute(0), new TimeInterval(0, 0, 0, 7, 0, 0), user));
+            routines.add(new Routine("Monthly Report", LocalDateTime.now().minusDays(14).withHour(10).withMinute(0), new TimeInterval(0, 0, 0, 0, 1, 0), user));
         } else if (user.getEmail().equals("jane.smith@example.com")) {
-            routines.add(new Routine("Yoga Class", LocalDateTime.now().plusDays(1).withHour(7).withMinute(0), new TimeInterval(0, 0, 0, 2, 0, 0), user));
-            routines.add(new Routine("Project Meeting", LocalDateTime.now().plusDays(1).withHour(11).withMinute(0), new TimeInterval(0, 0, 0, 7, 0, 0), user));
-            routines.add(new Routine("Lunch with Clients", LocalDateTime.now().plusDays(1).withHour(13).withMinute(0), new TimeInterval(0, 0, 0, 7, 0, 0), user));
-            routines.add(new Routine("Piano Practice", LocalDateTime.now().plusDays(1).withHour(16).withMinute(0), new TimeInterval(0, 0, 1, 0, 0, 0), user));
-            routines.add(new Routine("Dinner with Family", LocalDateTime.now().plusDays(1).withHour(19).withMinute(0), new TimeInterval(0, 0, 1, 0, 0, 0), user));
+            routines.add(new Routine("Yoga Class", LocalDateTime.now().minusDays(14).withHour(7).withMinute(0), new TimeInterval(0, 0, 0, 2, 0, 0), user));
+            routines.add(new Routine("Project Meeting", LocalDateTime.now().minusDays(14).withHour(11).withMinute(0), new TimeInterval(0, 0, 0, 7, 0, 0), user));
+            routines.add(new Routine("Lunch with Clients", LocalDateTime.now().minusDays(14).withHour(13).withMinute(0), new TimeInterval(0, 0, 0, 7, 0, 0), user));
+            routines.add(new Routine("Piano Practice", LocalDateTime.now().minusDays(14).withHour(16).withMinute(0), new TimeInterval(0, 0, 1, 0, 0, 0), user));
+            routines.add(new Routine("Dinner with Family", LocalDateTime.now().minusDays(14).withHour(19).withMinute(0), new TimeInterval(0, 0, 1, 0, 0, 0), user));
         } else if (user.getEmail().equals("bob.johnson@example.com")) {
-            routines.add(new Routine("Gym Workout", LocalDateTime.now().plusDays(1).withHour(6).withMinute(30), new TimeInterval(0, 0, 1, 0, 0, 0), user));
-            routines.add(new Routine("Team Standup", LocalDateTime.now().plusDays(1).withHour(9).withMinute(30), new TimeInterval(0, 0, 1, 0, 0, 0), user));
-            routines.add(new Routine("Coding Session", LocalDateTime.now().plusDays(1).withHour(14).withMinute(0), new TimeInterval(0, 0, 1, 0, 0, 0), user));
-            routines.add(new Routine("Weekly Sync", LocalDateTime.now().plusDays(1).withHour(10).withMinute(0), new TimeInterval(0, 0, 0, 7, 0, 0), user));
-            routines.add(new Routine("Client Call", LocalDateTime.now().plusDays(1).withHour(15).withMinute(0), new TimeInterval(0, 0, 0, 7, 0, 0), user));
-            routines.add(new Routine("Date Night", LocalDateTime.now().plusDays(1).withHour(20).withMinute(0), new TimeInterval(0, 0, 0, 7, 0, 0), user));
+            routines.add(new Routine("Gym Workout", LocalDateTime.now().minusDays(14).withHour(6).withMinute(30), new TimeInterval(0, 0, 1, 0, 0, 0), user));
+            routines.add(new Routine("Team Standup", LocalDateTime.now().minusDays(14).withHour(9).withMinute(30), new TimeInterval(0, 0, 1, 0, 0, 0), user));
+            routines.add(new Routine("Coding Session", LocalDateTime.now().minusDays(14).withHour(14).withMinute(0), new TimeInterval(0, 0, 1, 0, 0, 0), user));
+            routines.add(new Routine("Weekly Sync", LocalDateTime.now().minusDays(14).withHour(10).withMinute(0), new TimeInterval(0, 0, 0, 7, 0, 0), user));
+            routines.add(new Routine("Client Call", LocalDateTime.now().minusDays(14).withHour(15).withMinute(0), new TimeInterval(0, 0, 0, 7, 0, 0), user));
+            routines.add(new Routine("Date Night", LocalDateTime.now().minusDays(14).withHour(20).withMinute(0), new TimeInterval(0, 0, 0, 7, 0, 0), user));
         }
 
+        routines.forEach(routine -> {
+            List<RoutineExecution> routineExecutions = createRoutineExecutions(routine, 3);
+            routine.getRoutineExecutions().addAll(routineExecutions);
+        });
+
+
         return routines;
+    }
+
+    private List<RoutineExecution> createRoutineExecutions(Routine routine, int numberOfExecutions) {
+        List<RoutineExecution> routineExecutions = new ArrayList<>();
+        LocalDateTime executionTime = routine.getStartDateTime().plusDays(1);
+        for (int i = 0; i < numberOfExecutions; i++) {
+            routineExecutions.add(new RoutineExecution(routine, executionTime.plusDays(i)));
+        }
+        return routineExecutions;
     }
 
 }

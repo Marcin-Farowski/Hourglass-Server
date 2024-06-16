@@ -1,6 +1,7 @@
 package com.hourglass.routine;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -19,12 +20,13 @@ public class RoutineExecution {
     private Long id;
 
     @ManyToOne
+    @JsonIgnore
     private Routine routine;
 
     private LocalDateTime executionTime;
 
 
-    public RoutineExecution(Routine routine, LocalDateTime executionTime, boolean wasSuccessful, String notes) {
+    public RoutineExecution(Routine routine, LocalDateTime executionTime) {
         this.routine = routine;
         this.executionTime = executionTime;
     }

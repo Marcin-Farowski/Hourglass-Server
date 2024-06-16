@@ -21,7 +21,7 @@ public class RoutineJPADataAccessService implements RoutineDao {
     }
 
     @Override
-    public Optional<Routine> selectRoutineById(int id) {
+    public Optional<Routine> selectRoutineById(Long id) {
         return Optional.empty();
     }
 

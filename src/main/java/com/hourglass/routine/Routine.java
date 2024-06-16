@@ -8,6 +8,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Data
@@ -18,7 +20,7 @@ public class Routine {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "routine_seq")
     @SequenceGenerator(name = "routine_seq", sequenceName = "routine_sequence", allocationSize = 1)
-    private Integer id;
+    private Long id;
 
     @Column(nullable = false)
     private String name;
@@ -30,13 +32,13 @@ public class Routine {
     @Column(nullable = false)
     private TimeInterval renewalInterval;
 
-    @Column(nullable = false)
-    private boolean isCompleted;
-
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
     @JsonIgnore
     private User user;
+
+    @OneToMany(mappedBy = "routine", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<RoutineExecution> routineExecutions = new ArrayList<>();
 
     public Routine(String name, LocalDateTime startDateTime, TimeInterval renewalInterval, User user) {
         this.name = name;
