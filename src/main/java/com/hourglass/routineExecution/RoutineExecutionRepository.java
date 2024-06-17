@@ -1,4 +1,4 @@
-package com.hourglass.routine;
+package com.hourglass.routineExecution;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 

@@ -1,7 +1,8 @@
-package com.hourglass.routine;
+package com.hourglass.routineExecution;
 
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.hourglass.routine.Routine;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;

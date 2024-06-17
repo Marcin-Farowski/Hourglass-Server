@@ -1,7 +1,7 @@
 package com.hourglass;
 
 import com.hourglass.routine.Routine;
-import com.hourglass.routine.RoutineExecution;
+import com.hourglass.routineExecution.RoutineExecution;
 import com.hourglass.routine.RoutineRepository;
 import com.hourglass.routine.TimeInterval;
 import com.hourglass.user.Role;

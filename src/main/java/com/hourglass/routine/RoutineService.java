@@ -18,4 +18,8 @@ public class RoutineService {
     public List<Routine> getRoutinesByUser(User user) {
         return routineDao.selectRoutinesByUser(user);
     }
+
+    public void addRoutine(RoutineCreationRequest routineCreationRequest) {
+
+    }
 }
