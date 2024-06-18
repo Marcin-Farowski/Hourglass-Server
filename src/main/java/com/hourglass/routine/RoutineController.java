@@ -1,9 +1,6 @@
 package com.hourglass.routine;
 
-import com.hourglass.user.User;
-import com.hourglass.user.UserRepository;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -13,19 +10,21 @@ import java.util.List;
 public class RoutineController {
 
     private final RoutineService routineService;
-    private final UserRepository userRepository;
 
-    public RoutineController(RoutineService routineService, UserRepository userRepository) {
+
+    public RoutineController(RoutineService routineService) {
         this.routineService = routineService;
-        this.userRepository = userRepository;
     }
 
     @GetMapping
-    public List<Routine> getRoutines() {
-        UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        String email = userDetails.getUsername();
-        User user = userRepository.findByEmail(email).orElseThrow(() -> new RuntimeException("User not found"));
-        return routineService.getRoutinesByUser(user);
+    public List<Routine> getRoutinesByUser() {
+        return routineService.getRoutinesByUser();
+    }
+
+    @PostMapping
+    public ResponseEntity<Routine> createRoutine(@RequestBody RoutineCreationRequest routine) {
+        Routine createdRoutine = routineService.createRoutine(routine);
+        return ResponseEntity.status(201).body(createdRoutine);
     }
 
 //    @PostMapping("/{id}/complete")

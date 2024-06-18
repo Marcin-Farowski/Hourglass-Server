@@ -7,5 +7,5 @@ import java.util.Optional;
 
 public interface RoutineDao {
     List<Routine> selectRoutinesByUser(User user);
-    void addRoutine(Routine routine);
+    Routine insertRoutine(Routine routine);
 }

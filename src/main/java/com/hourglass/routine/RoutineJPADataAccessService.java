@@ -21,8 +21,8 @@ public class RoutineJPADataAccessService implements RoutineDao {
     }
 
     @Override
-    public void addRoutine(Routine routine) {
-        routineRepository.save(routine);
+    public Routine insertRoutine(Routine routine) {
+        return routineRepository.save(routine);
     }
 
 
