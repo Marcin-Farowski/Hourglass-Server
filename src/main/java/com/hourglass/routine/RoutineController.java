@@ -27,6 +27,12 @@ public class RoutineController {
         return ResponseEntity.status(201).body(createdRoutine);
     }
 
+    @DeleteMapping("/{routineId}")
+    public ResponseEntity<Void> deleteRoutine(@PathVariable Long routineId) {
+        routineService.deleteRoutine(routineId);
+        return ResponseEntity.noContent().build();
+    }
+
 //    @PostMapping("/{id}/complete")
 //    public Routine completeRoutine(@PathVariable Long id) {
 //        return routineService.completeRoutine(id);
