@@ -22,8 +22,8 @@ public class RoutineController {
     }
 
     @PostMapping
-    public ResponseEntity<Routine> createRoutine(@RequestBody RoutineCreationRequest routine) {
-        Routine createdRoutine = routineService.createRoutine(routine);
+    public ResponseEntity<Routine> createRoutine(@RequestBody RoutineCreationRequest routineCreationRequest) {
+        Routine createdRoutine = routineService.createRoutine(routineCreationRequest);
         return ResponseEntity.status(201).body(createdRoutine);
     }
 
