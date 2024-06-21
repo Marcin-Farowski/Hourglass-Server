@@ -20,4 +20,37 @@ public class UserService {
         return userRepository.findByEmail(email)
                 .orElseThrow(() -> new UserNotFoundException("User not found"));
     }
+
+    public void updateUser(UserUpdateRequest userUpdateRequest) {
+        User currentUser = getCurrentUser();
+
+        boolean changes = false;
+
+        if (userUpdateRequest.firstName() != null &&
+                !userUpdateRequest.firstName().equals(currentUser.getFirstName())) {
+            currentUser.setFirstName(userUpdateRequest.firstName());
+            changes = true;
+        }
+
+        if (userUpdateRequest.lastName() != null &&
+                !userUpdateRequest.lastName().equals(currentUser.getLastName())) {
+            currentUser.setLastName(userUpdateRequest.lastName());
+            changes = true;
+        }
+
+        if (userUpdateRequest.email() != null &&
+                !userUpdateRequest.email().equals(currentUser.getEmail())) {
+            if (userRepository.existsUserWithEmail(userUpdateRequest.email())) {
+                throw new DuplicateResourceException("E-mail already taken");
+            }
+            currentUser.setEmail(userUpdateRequest.email());
+            changes = true;
+        }
+
+        if (!changes) {
+            throw new RequestValidationException("No data changes found");
+        }
+
+        userRepository.save(currentUser);
+    }
 }

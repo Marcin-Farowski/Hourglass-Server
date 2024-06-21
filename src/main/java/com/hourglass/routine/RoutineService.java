@@ -40,6 +40,6 @@ public class RoutineService {
         if (!routine.getUser().equals(currentUser)) {
             throw new AccessDeniedException("You are not authorized to delete this routine");
         }
-        routineRepository.delete(routine);
+        routineDao.deleteRoutineById(routineId);
     }
 }

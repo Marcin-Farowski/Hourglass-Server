@@ -25,5 +25,8 @@ public class RoutineJPADataAccessService implements RoutineDao {
         return routineRepository.save(routine);
     }
 
-
+    @Override
+    public void deleteRoutineById(Long routineId) {
+        routineRepository.deleteById(routineId);
+    }
 }
