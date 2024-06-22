@@ -1,5 +1,6 @@
 package com.hourglass.user;
 
+import com.hourglass.exception.RequestValidationException;
 import com.hourglass.exception.UserNotFoundException;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;

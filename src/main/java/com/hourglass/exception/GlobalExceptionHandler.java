@@ -64,4 +64,17 @@ public class GlobalExceptionHandler {
 
         return new ResponseEntity<>(apiError, HttpStatus.FORBIDDEN);
     }
+
+    @ExceptionHandler(RequestValidationException.class)
+    public ResponseEntity<ApiError> handleRequestValidationException(RequestValidationException exception,
+                                                                     HttpServletRequest request) {
+        ApiError apiError = new ApiError(
+                request.getRequestURI(),
+                exception.getMessage(),
+                HttpStatus.BAD_REQUEST.value(),
+                LocalDateTime.now()
+        );
+
+        return new ResponseEntity<>(apiError, HttpStatus.BAD_REQUEST);
+    }
 }
