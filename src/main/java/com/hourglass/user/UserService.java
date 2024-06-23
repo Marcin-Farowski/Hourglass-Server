@@ -1,5 +1,6 @@
 package com.hourglass.user;
 
+import com.hourglass.exception.DuplicateResourceException;
 import com.hourglass.exception.RequestValidationException;
 import com.hourglass.exception.UserNotFoundException;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -41,7 +42,7 @@ public class UserService {
 
         if (userUpdateRequest.email() != null &&
                 !userUpdateRequest.email().equals(currentUser.getEmail())) {
-            if (userRepository.existsUserWithEmail(userUpdateRequest.email())) {
+            if (userRepository.existsUserByEmail(userUpdateRequest.email())) {
                 throw new DuplicateResourceException("E-mail already taken");
             }
             currentUser.setEmail(userUpdateRequest.email());
