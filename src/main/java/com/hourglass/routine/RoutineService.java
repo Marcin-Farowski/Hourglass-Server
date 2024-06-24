@@ -34,12 +34,16 @@ public class RoutineService {
     }
 
     public void deleteRoutine(Long routineId) {
-        User currentUser = userService.getCurrentUser();
         Routine routine = routineRepository.findById(routineId)
                 .orElseThrow(() -> new ResourceNotFoundException("Routine with id [%s] not found".formatted(routineId)));
+        ensureUserOwnsRoutine(routine);
+        routineDao.deleteRoutineById(routineId);
+    }
+
+    private void ensureUserOwnsRoutine(Routine routine) {
+        User currentUser = userService.getCurrentUser();
         if (!routine.getUser().equals(currentUser)) {
             throw new AccessDeniedException("You are not authorized to delete this routine");
         }
-        routineDao.deleteRoutineById(routineId);
     }
 }
