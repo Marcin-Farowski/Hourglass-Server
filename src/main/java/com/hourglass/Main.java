@@ -54,14 +54,14 @@ public class Main {
                     .role(Role.USER)
                     .build();
 
-            userRepository.saveAll(List.of(user1, user2, user3));
+//            userRepository.saveAll(List.of(user1, user2, user3));
 
-            List<Routine> routines = new ArrayList<>();
-            routines.addAll(createRoutinesForUser(user1));
-            routines.addAll(createRoutinesForUser(user2));
-            routines.addAll(createRoutinesForUser(user3));
-
-            routineRepository.saveAll(routines);
+//            List<Routine> routines = new ArrayList<>();
+//            routines.addAll(createRoutinesForUser(user1));
+//            routines.addAll(createRoutinesForUser(user2));
+//            routines.addAll(createRoutinesForUser(user3));
+//
+//            routineRepository.saveAll(routines);
         };
     }
 
