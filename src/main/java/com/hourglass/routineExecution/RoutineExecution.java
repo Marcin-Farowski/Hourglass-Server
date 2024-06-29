@@ -17,7 +17,7 @@ import java.time.LocalDateTime;
 public class RoutineExecution {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue
     private Long id;
 
     @ManyToOne
