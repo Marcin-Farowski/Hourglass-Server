@@ -12,13 +12,13 @@ CREATE TABLE routine (
                          id BIGSERIAL PRIMARY KEY,
                          name TEXT NOT NULL,
                          start_date_time TIMESTAMP NOT NULL,
-                         renewal_interval_seconds INT NOT NULL,
-                         renewal_interval_minutes INT NOT NULL,
-                         renewal_interval_hours INT NOT NULL,
-                         renewal_interval_days INT NOT NULL,
-                         renewal_interval_months INT NOT NULL,
-                         renewal_interval_years INT NOT NULL,
-                         user_id INT NOT NULL,
+                         seconds INT NOT NULL,
+                         minutes INT NOT NULL,
+                         hours INT NOT NULL,
+                         days INT NOT NULL,
+                         months INT NOT NULL,
+                         years INT NOT NULL,
+                         user_id BIGINT NOT NULL,
                          CONSTRAINT fk_user FOREIGN KEY (user_id) REFERENCES _user(id) ON DELETE CASCADE
 );
 

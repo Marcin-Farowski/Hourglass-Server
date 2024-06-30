@@ -19,7 +19,14 @@ import java.util.List;
 public class Routine {
 
     @Id
-    @GeneratedValue
+    @SequenceGenerator(
+            name = "routine_id_seq",
+            sequenceName = "routine_id_seq",
+            allocationSize = 1
+    )
+    @GeneratedValue(
+            strategy = GenerationType.SEQUENCE,
+            generator = "routine_id_seq")
     private Long id;
 
     @Column(nullable = false)

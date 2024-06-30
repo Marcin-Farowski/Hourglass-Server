@@ -18,11 +18,26 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "_user")
+@Table(
+        name = "_user",
+        uniqueConstraints = {
+                @UniqueConstraint(
+                        name = "_user_email_key",
+                        columnNames = "email"
+                )
+        }
+)
 public class User implements UserDetails {
 
     @Id
-    @GeneratedValue
+    @SequenceGenerator(
+            name = "_user_id_seq",
+            sequenceName = "_user_id_seq",
+            allocationSize = 1
+    )
+    @GeneratedValue(
+            strategy = GenerationType.SEQUENCE,
+            generator = "_user_id_seq")
     private Long id;
 
     @Column(nullable = false)
@@ -31,7 +46,9 @@ public class User implements UserDetails {
     @Column(nullable = false)
     private String lastName;
 
-    @Column(nullable = false)
+    @Column(
+            nullable = false
+    )
     private String email;
 
     @Column(nullable = false)

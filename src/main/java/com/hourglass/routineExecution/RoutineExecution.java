@@ -17,7 +17,14 @@ import java.time.LocalDateTime;
 public class RoutineExecution {
 
     @Id
-    @GeneratedValue
+    @SequenceGenerator(
+            name = "routine_execution_id_seq",
+            sequenceName = "routine_execution_id_seq",
+            allocationSize = 1
+    )
+    @GeneratedValue(
+            strategy = GenerationType.SEQUENCE,
+            generator = "routine_execution_id_seq")
     private Long id;
 
     @ManyToOne
