@@ -33,11 +33,11 @@ public class RoutineController {
         return ResponseEntity.noContent().build();
     }
 
-//    @PostMapping("/{id}/complete")
-//    public Routine completeRoutine(@PathVariable Long id) {
-//        return routineService.completeRoutine(id);
-//    }
-//
+    @PostMapping("/{id}/complete")
+    public Routine completeRoutine(@PathVariable Long id) {
+        return routineService.completeRoutine(id);
+    }
+
 //    @PostMapping("/{id}/resetCurrentCompletion")
 //    public Routine resetRoutine(@PathVariable Long id) {
 //        return routineService.resetRoutine(id);
