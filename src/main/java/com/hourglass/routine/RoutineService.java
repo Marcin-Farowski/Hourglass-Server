@@ -40,12 +40,12 @@ public class RoutineService {
         routineDao.deleteRoutineById(routineId);
     }
 
-    public Routine completeRoutine(Long routineId) {
+    public Routine executeRoutine(Long routineId) {
         Routine routine = routineRepository.findById(routineId)
                 .orElseThrow(() -> new ResourceNotFoundException("Routine with id [%s] not found".formatted(routineId)));
         ensureUserOwnsRoutine(routine);
         routine.addRoutineExecution();
-        routineRepository.save(routine);
+        return routineRepository.save(routine);
     }
 
     private void ensureUserOwnsRoutine(Routine routine) {

@@ -53,4 +53,8 @@ public class Routine {
         this.renewalInterval = renewalInterval;
         this.user = user;
     }
+
+    public void addRoutineExecution() {
+        routineExecutions.add(new RoutineExecution(this, LocalDateTime.now()));
+    }
 }
