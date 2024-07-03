@@ -1,6 +1,5 @@
 package com.hourglass.routineExecution;
 
-import com.hourglass.routine.RoutineExecutionService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -13,8 +12,7 @@ public class RoutineExecutionController {
 
     private final RoutineExecutionService routineExecutionService;
 
-
-    public RoutineController(RoutineExecutionService routineExecutionService) {
+    public RoutineExecutionController(RoutineExecutionService routineExecutionService) {
         this.routineExecutionService = routineExecutionService;
     }
 
