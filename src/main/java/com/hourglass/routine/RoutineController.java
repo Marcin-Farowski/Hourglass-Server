@@ -37,10 +37,4 @@ public class RoutineController {
     public Routine executeRoutine(@PathVariable Long routineId) {
         return routineService.executeRoutine(routineId);
     }
-
-//    @PostMapping("/{routineId}/resetCurrentCompletion")
-//    public Routine resetRoutine(@PathVariable Long routineId) {
-//        return routineService.resetRoutine(routineId);
-//    }
-
 }
