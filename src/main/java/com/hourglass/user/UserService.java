@@ -40,6 +40,18 @@ public class UserService {
             changes = true;
         }
 
+        if (userUpdateRequest.dateOfBirth() != null &&
+                !userUpdateRequest.dateOfBirth().equals(currentUser.getDateOfBirth())) {
+            currentUser.setDateOfBirth(userUpdateRequest.dateOfBirth());
+            changes = true;
+        }
+
+        if (userUpdateRequest.gender() != null &&
+                !userUpdateRequest.gender().equals(currentUser.getGender())) {
+            currentUser.setGender(userUpdateRequest.gender());
+            changes = true;
+        }
+
         if (userUpdateRequest.email() != null &&
                 !userUpdateRequest.email().equals(currentUser.getEmail())) {
             if (userRepository.existsUserByEmail(userUpdateRequest.email())) {
