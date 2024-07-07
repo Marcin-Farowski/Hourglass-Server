@@ -4,6 +4,7 @@ import com.hourglass.routine.Routine;
 import com.hourglass.routineExecution.RoutineExecution;
 import com.hourglass.routine.RoutineRepository;
 import com.hourglass.routine.TimeInterval;
+import com.hourglass.user.Gender;
 import com.hourglass.user.Role;
 import com.hourglass.user.User;
 import com.hourglass.user.UserRepository;
@@ -14,6 +15,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -33,6 +35,8 @@ public class Main {
             User user1 = User.builder()
                     .firstName("John")
                     .lastName("Doe")
+                    .dateOfBirth(LocalDate.of(1990, 1, 1))
+                    .gender(Gender.MALE)
                     .email("john.doe@example.com")
                     .password(passwordEncoder.encode("password"))
                     .role(Role.USER)
@@ -41,6 +45,8 @@ public class Main {
             User user2 = User.builder()
                     .firstName("Jane")
                     .lastName("Smith")
+                    .dateOfBirth(LocalDate.of(2000, 12, 30))
+                    .gender(Gender.FEMALE)
                     .email("jane.smith@example.com")
                     .password(passwordEncoder.encode("password"))
                     .role(Role.USER)
@@ -49,6 +55,8 @@ public class Main {
             User user3 = User.builder()
                     .firstName("Bob")
                     .lastName("Johnson")
+                    .dateOfBirth(LocalDate.of(2010, 6, 15))
+                    .gender(Gender.NOT_SPECIFIED)
                     .email("bob.johnson@example.com")
                     .password(passwordEncoder.encode("password"))
                     .role(Role.USER)

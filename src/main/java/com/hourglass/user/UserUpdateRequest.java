@@ -1,11 +1,11 @@
 package com.hourglass.user;
 
-import java.util.Date;
+import java.time.LocalDate;
 
 public record UserUpdateRequest(
         String firstName,
         String lastName,
-        Date dateOfBirth,
+        LocalDate dateOfBirth,
         Gender gender,
         String email
 ) {
