@@ -15,8 +15,10 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -38,22 +40,28 @@ class RoutineRepositoryTest extends AbstractTestcontainers {
     void findByUser() {
         // Given
         PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+        String email = FAKER.internet().safeEmailAddress() + "-" + UUID.randomUUID();
         User user = User.builder()
-                .firstName("John")
-                .lastName("Doe")
-                .dateOfBirth(LocalDate.of(1990, 1, 1))
+                .firstName(FAKER.name().firstName())
+                .lastName(FAKER.name().lastName())
+                .dateOfBirth(FAKER.date().birthday().toInstant().atZone(ZoneId.systemDefault()).toLocalDate())
                 .gender(Gender.MALE)
-                .email("john.doe@example.com")
+                .email(email)
                 .password(passwordEncoder.encode("password"))
                 .role(Role.USER)
                 .build();
 
         List<Routine> routines = new ArrayList<>();
-        routines.add(new Routine("Morning Jogging", LocalDateTime.now().minusDays(14).withHour(6).withMinute(0), new TimeInterval(0, 0, 1, 0, 0, 0), user));
-        routines.add(new Routine("Read a Book", LocalDateTime.now().minusDays(14).withHour(18).withMinute(0), new TimeInterval(0, 0, 1, 0, 0, 0), user));
-        routines.add(new Routine("Team Meeting", LocalDateTime.now().minusDays(14).withHour(9).withMinute(0), new TimeInterval(0, 0, 0, 7, 0, 0), user));
-        routines.add(new Routine("Grocery Shopping", LocalDateTime.now().minusDays(14).withHour(17).withMinute(0), new TimeInterval(0, 0, 0, 7, 0, 0), user));
-        routines.add(new Routine("Monthly Report", LocalDateTime.now().minusDays(14).withHour(10).withMinute(0), new TimeInterval(0, 0, 0, 0, 1, 0), user));
+        routines.add(new Routine(FAKER.lorem().sentence(), LocalDateTime.now().minusDays(14).withHour(6).withMinute(0),
+                new TimeInterval(0, 0, 1, 0, 0, 0), user));
+        routines.add(new Routine(FAKER.lorem().sentence(), LocalDateTime.now().minusDays(14).withHour(18).withMinute(0),
+                new TimeInterval(0, 0, 1, 0, 0, 0), user));
+        routines.add(new Routine(FAKER.lorem().sentence(), LocalDateTime.now().minusDays(14).withHour(9).withMinute(0),
+                new TimeInterval(0, 0, 0, 7, 0, 0), user));
+        routines.add(new Routine(FAKER.lorem().sentence(), LocalDateTime.now().minusDays(14).withHour(17).withMinute(0),
+                new TimeInterval(0, 0, 0, 7, 0, 0), user));
+        routines.add(new Routine(FAKER.lorem().sentence(), LocalDateTime.now().minusDays(14).withHour(10).withMinute(0),
+                new TimeInterval(0, 0, 0, 0, 1, 0), user));
 
         userRepository.save(user);
         underTest.saveAll(routines);
