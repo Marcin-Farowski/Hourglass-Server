@@ -16,7 +16,7 @@ public class RoutineJPADataAccessService implements RoutineDao {
 
     @Override
     public List<Routine> selectRoutinesByUser(User user) {
-        return routineRepository.findByUser(user);
+        return routineRepository.findRoutinesByUser(user);
     }
 
     @Override

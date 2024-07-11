@@ -37,7 +37,7 @@ class RoutineRepositoryTest extends AbstractTestcontainers {
     }
 
     @Test
-    void findByUser() {
+    void findRoutinesByUser() {
         // Given
         PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
         String email = FAKER.internet().safeEmailAddress() + "-" + UUID.randomUUID();
@@ -67,10 +67,34 @@ class RoutineRepositoryTest extends AbstractTestcontainers {
         underTest.saveAll(routines);
 
         // When
-        List<Routine> actual = underTest.findByUser(user);
+        var actual = underTest.findRoutinesByUser(user);
 
         //Then
         assertThat(actual).hasSize(5);
         assertThat(actual).containsExactlyInAnyOrderElementsOf(routines);
+    }
+
+    @Test
+    void findRoutinesByUserWithNoRoutines() {
+        // Given
+        PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+        String email = FAKER.internet().safeEmailAddress() + "-" + UUID.randomUUID();
+        User user = User.builder()
+                .firstName(FAKER.name().firstName())
+                .lastName(FAKER.name().lastName())
+                .dateOfBirth(FAKER.date().birthday().toInstant().atZone(ZoneId.systemDefault()).toLocalDate())
+                .gender(Gender.MALE)
+                .email(email)
+                .password(passwordEncoder.encode("password"))
+                .role(Role.USER)
+                .build();
+
+        userRepository.save(user);
+
+        // When
+        var actual = underTest.findRoutinesByUser(user);
+
+        // Then
+        assertThat(actual).isEmpty();
     }
 }
