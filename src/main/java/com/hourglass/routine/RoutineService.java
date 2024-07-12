@@ -11,33 +11,31 @@ import java.util.List;
 @Service
 public class RoutineService {
 
-    private final RoutineDao routineDao;
     private final UserService userService;
     private final RoutineRepository routineRepository;
 
-    public RoutineService(RoutineDao routineDao, UserService userService, RoutineRepository routineRepository) {
-        this.routineDao = routineDao;
+    public RoutineService(UserService userService, RoutineRepository routineRepository) {
         this.userService = userService;
         this.routineRepository = routineRepository;
     }
 
     public List<Routine> getRoutinesByUser() {
         User currentUser = userService.getCurrentUser();
-        return routineDao.selectRoutinesByUser(currentUser);
+        return routineRepository.findRoutinesByUser(currentUser);
     }
 
     public Routine createRoutine(RoutineCreationRequest routineCreationRequest) {
         User currentUser = userService.getCurrentUser();
         Routine routine = new Routine(routineCreationRequest.name(), routineCreationRequest.startDateTime(),
                 routineCreationRequest.renewalInterval(), currentUser);
-        return routineDao.insertRoutine(routine);
+        return routineRepository.save(routine);
     }
 
     public void deleteRoutine(Long routineId) {
         Routine routine = routineRepository.findById(routineId)
                 .orElseThrow(() -> new ResourceNotFoundException("Routine with id [%s] not found".formatted(routineId)));
         ensureUserOwnsRoutine(routine);
-        routineDao.deleteRoutineById(routineId);
+        routineRepository.deleteById(routineId);
     }
 
     public Routine executeRoutine(Long routineId) {
