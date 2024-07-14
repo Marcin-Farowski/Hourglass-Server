@@ -38,6 +38,15 @@ public class RoutineService {
         routineRepository.deleteById(routineId);
     }
 
+    public Routine updateRoutine(Long routineId, RoutineUpdateRequest routineUpdateRequest) {
+        Routine routine = routineRepository.findById(routineId)
+                .orElseThrow(() -> new ResourceNotFoundException("Routine with id [%s] not found".formatted(routineId)));
+        ensureUserOwnsRoutine(routine);
+        routine.setName(routineUpdateRequest.name());
+        routine.setRenewalInterval(routineUpdateRequest.renewalInterval());
+        return routineRepository.save(routine);
+    }
+
     public Routine executeRoutine(Long routineId) {
         Routine routine = routineRepository.findById(routineId)
                 .orElseThrow(() -> new ResourceNotFoundException("Routine with id [%s] not found".formatted(routineId)));
@@ -49,7 +58,7 @@ public class RoutineService {
     private void ensureUserOwnsRoutine(Routine routine) {
         User currentUser = userService.getCurrentUser();
         if (!routine.getUser().equals(currentUser)) {
-            throw new AccessDeniedException("You are not authorized to delete this routine");
+            throw new AccessDeniedException("You are not authorized to access this routine");
         }
     }
 }

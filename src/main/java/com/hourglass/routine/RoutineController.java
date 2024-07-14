@@ -33,6 +33,12 @@ public class RoutineController {
         return ResponseEntity.noContent().build();
     }
 
+    @PutMapping("/{routineId}")
+    public ResponseEntity<Routine> updateRoutine(@PathVariable Long routineId, @RequestBody RoutineUpdateRequest routineUpdateRequest) {
+        Routine updatedRoutine = routineService.updateRoutine(routineId, routineUpdateRequest);
+        return ResponseEntity.ok(updatedRoutine);
+    }
+
     @PostMapping("/{routineId}/execute")
     public Routine executeRoutine(@PathVariable Long routineId) {
         return routineService.executeRoutine(routineId);
