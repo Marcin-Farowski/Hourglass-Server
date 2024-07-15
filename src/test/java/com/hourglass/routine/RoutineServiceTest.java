@@ -1,5 +1,6 @@
 package com.hourglass.routine;
 
+import com.hourglass.exception.RequestValidationException;
 import com.hourglass.exception.ResourceNotFoundException;
 import com.hourglass.user.Gender;
 import com.hourglass.user.Role;
@@ -118,6 +119,43 @@ class RoutineServiceTest {
     }
 
     @Test
+    void deleteRoutine_shouldThrowResourceNotFoundExceptionWhenRoutineNotFound() {
+        // Given
+        Long routineId = 1L;
+
+        // When
+        when(routineRepository.findById(routineId)).thenReturn(Optional.empty());
+
+        // Then
+        assertThatThrownBy(() -> underTest.deleteRoutine(routineId))
+                .isInstanceOf(ResourceNotFoundException.class)
+                .hasMessage("Routine with id [%s] not found".formatted(routineId));
+    }
+
+    @Test
+    void deleteRoutine_shouldThrowAccessDeniedExceptionWhenUserDoesNotOwnRoutine() {
+        // Given
+        User owner = mock(User.class);
+        User currentUser = mock(User.class);
+        Routine routine = new Routine(
+                "Test Routine",
+                LocalDateTime.now(),
+                new TimeInterval(0, 0, 1, 0, 0, 0),
+                owner
+        );
+        Long routineId = 1L;
+
+        // When
+        when(routineRepository.findById(routineId)).thenReturn(Optional.of(routine));
+        when(userService.getCurrentUser()).thenReturn(currentUser);
+
+        // Then
+        assertThatThrownBy(() -> underTest.deleteRoutine(routineId))
+                .isInstanceOf(AccessDeniedException.class)
+                .hasMessage("You are not authorized to access this routine");
+    }
+
+    @Test
     void updateRoutine() {
         // Given
         User user = mock(User.class);
@@ -150,6 +188,137 @@ class RoutineServiceTest {
     }
 
     @Test
+    void updateRoutine_shouldUpdateOnlyRoutineName() {
+        // Given
+        User user = mock(User.class);
+        Routine routine = new Routine(
+                "Old Name",
+                LocalDateTime.now(),
+                new TimeInterval(0, 0, 1, 0, 0, 0),
+                user
+        );
+
+        RoutineUpdateRequest request = new RoutineUpdateRequest(
+                "New Name",
+                null
+        );
+
+        Long routineId = 1L;
+
+        // When
+        when(routineRepository.findById(routineId)).thenReturn(Optional.of(routine));
+        when(userService.getCurrentUser()).thenReturn(user);
+        when(routineRepository.save(routine)).thenReturn(new Routine(request.name(), routine.getStartDateTime(), routine.getRenewalInterval(), user));
+
+        Routine actual = underTest.updateRoutine(routineId, request);
+
+        // Then
+        assertThat(actual.getName()).isEqualTo(request.name());
+        assertThat(actual.getRenewalInterval()).isEqualTo(routine.getRenewalInterval());
+        verify(routineRepository).save(routine);
+    }
+
+    @Test
+    void updateRoutine_shouldUpdateOnlyRenewalInterval() {
+        // Given
+        User user = mock(User.class);
+        Routine routine = new Routine(
+                "Test Routine",
+                LocalDateTime.now(),
+                new TimeInterval(0, 0, 1, 0, 0, 0),
+                user
+        );
+
+        RoutineUpdateRequest request = new RoutineUpdateRequest(
+                null,
+                new TimeInterval(0, 0, 2, 0, 0, 0)
+        );
+
+        Long routineId = 1L;
+
+        // When
+        when(routineRepository.findById(routineId)).thenReturn(Optional.of(routine));
+        when(userService.getCurrentUser()).thenReturn(user);
+        when(routineRepository.save(routine)).thenReturn(new Routine(routine.getName(), routine.getStartDateTime(), request.renewalInterval(), user));
+
+        Routine actual = underTest.updateRoutine(routineId, request);
+
+        // Then
+        assertThat(actual.getRenewalInterval()).isEqualTo(request.renewalInterval());
+        assertThat(actual.getName()).isEqualTo(routine.getName());
+        verify(routineRepository).save(routine);
+    }
+
+    @Test
+    void updateRoutine_shouldThrowResourceNotFoundExceptionWhenRoutineNotFound() {
+        // Given
+        Long routineId = 1L;
+        RoutineUpdateRequest updateRequest = mock(RoutineUpdateRequest.class);
+
+        // When
+        when(routineRepository.findById(routineId)).thenReturn(Optional.empty());
+
+        // Then
+        assertThatThrownBy(() -> underTest.updateRoutine(routineId, updateRequest))
+                .isInstanceOf(ResourceNotFoundException.class)
+                .hasMessage("Routine with id [%s] not found".formatted(routineId));
+    }
+
+    @Test
+    void updateRoutine_shouldThrowAccessDeniedExceptionWhenUserDoesNotOwnRoutine() {
+        // Given
+        User owner = mock(User.class);
+        User currentUser = mock(User.class);
+        Routine routine = new Routine(
+                "Test Routine",
+                LocalDateTime.now(),
+                new TimeInterval(0, 0, 1, 0, 0, 0),
+                owner
+        );
+        RoutineUpdateRequest updateRequest = mock(RoutineUpdateRequest.class);
+        Long routineId = 1L;
+
+        // When
+        when(routineRepository.findById(routineId)).thenReturn(Optional.of(routine));
+        when(userService.getCurrentUser()).thenReturn(currentUser);
+
+        // Then
+        assertThatThrownBy(() -> underTest.updateRoutine(routineId, updateRequest))
+                .isInstanceOf(AccessDeniedException.class)
+                .hasMessage("You are not authorized to access this routine");
+    }
+
+    @Test
+    void updateRoutine_shouldThrowRequestValidationExceptionWhenNoChanges() {
+        // Given
+        User user = mock(User.class);
+        Routine routine = new Routine(
+                "Test Routine",
+                LocalDateTime.now(),
+                new TimeInterval(0, 0, 1, 0, 0, 0),
+                user
+        );
+
+        RoutineUpdateRequest request = new RoutineUpdateRequest(
+                "Test Routine",
+                new TimeInterval(0, 0, 1, 0, 0, 0)
+        );
+
+        Long routineId = 1L;
+
+        // When
+        when(routineRepository.findById(routineId)).thenReturn(Optional.of(routine));
+        when(userService.getCurrentUser()).thenReturn(user);
+
+        // Then
+        assertThatThrownBy(() -> underTest.updateRoutine(routineId, request))
+                .isInstanceOf(RequestValidationException.class)
+                .hasMessage("No data changes found");
+
+        verify(routineRepository, never()).save(any(Routine.class));
+    }
+
+    @Test
     void executeRoutine() {
         // Given
         User user = mock(User.class);
@@ -179,62 +348,40 @@ class RoutineServiceTest {
     }
 
     @Test
-    void willThrowWhenRoutineNotFound() {
+    void executeRoutine_shouldThrowResourceNotFoundExceptionWhenRoutineNotFound() {
         // Given
         Long routineId = 1L;
-        RoutineUpdateRequest updateRequest = mock(RoutineUpdateRequest.class);
 
         // When
         when(routineRepository.findById(routineId)).thenReturn(Optional.empty());
 
         // Then
-        assertThatThrownBy(() -> underTest.deleteRoutine(routineId))
-                .isInstanceOf(ResourceNotFoundException.class)
-                .hasMessage("Routine with id [%s] not found".formatted(routineId));
-
         assertThatThrownBy(() -> underTest.executeRoutine(routineId))
-                .isInstanceOf(ResourceNotFoundException.class)
-                .hasMessage("Routine with id [%s] not found".formatted(routineId));
-
-        assertThatThrownBy(() -> underTest.updateRoutine(routineId, updateRequest))
                 .isInstanceOf(ResourceNotFoundException.class)
                 .hasMessage("Routine with id [%s] not found".formatted(routineId));
     }
 
     @Test
-    void willThrowWhenUserDoesNotOwnRoutine() {
+    void executeRoutine_shouldThrowAccessDeniedExceptionWhenUserDoesNotOwnRoutine() {
         // Given
         User owner = mock(User.class);
         User currentUser = mock(User.class);
-
         Routine routine = new Routine(
                 "Test Routine",
                 LocalDateTime.now(),
                 new TimeInterval(0, 0, 1, 0, 0, 0),
                 owner
         );
-
         Long routineId = 1L;
-
-        RoutineUpdateRequest updateRequest = mock(RoutineUpdateRequest.class);
 
         // When
         when(routineRepository.findById(routineId)).thenReturn(Optional.of(routine));
         when(userService.getCurrentUser()).thenReturn(currentUser);
 
         // Then
-        assertThatThrownBy(() -> underTest.deleteRoutine(routineId))
-                .isInstanceOf(AccessDeniedException.class)
-                .hasMessage("You are not authorized to access this routine");
-
         assertThatThrownBy(() -> underTest.executeRoutine(routineId))
                 .isInstanceOf(AccessDeniedException.class)
                 .hasMessage("You are not authorized to access this routine");
-
-        assertThatThrownBy(() -> underTest.updateRoutine(routineId, updateRequest))
-                .isInstanceOf(AccessDeniedException.class)
-                .hasMessage("You are not authorized to access this routine");
     }
-
 
 }

@@ -1,5 +1,6 @@
 package com.hourglass.routine;
 
+import com.hourglass.exception.RequestValidationException;
 import com.hourglass.exception.ResourceNotFoundException;
 import com.hourglass.user.User;
 import com.hourglass.user.UserService;
@@ -39,12 +40,28 @@ public class RoutineService {
     }
 
     public Routine updateRoutine(Long routineId, RoutineUpdateRequest routineUpdateRequest) {
-        Routine routine = routineRepository.findById(routineId)
+        Routine currentRoutine = routineRepository.findById(routineId)
                 .orElseThrow(() -> new ResourceNotFoundException("Routine with id [%s] not found".formatted(routineId)));
-        ensureUserOwnsRoutine(routine);
-        routine.setName(routineUpdateRequest.name());
-        routine.setRenewalInterval(routineUpdateRequest.renewalInterval());
-        return routineRepository.save(routine);
+        ensureUserOwnsRoutine(currentRoutine);
+
+        boolean changes = false;
+
+        if (routineUpdateRequest.name() != null &&
+                !routineUpdateRequest.name().equals(currentRoutine.getName())) {
+            currentRoutine.setName(routineUpdateRequest.name());
+            changes = true;
+        }
+        if (routineUpdateRequest.renewalInterval() != null &&
+                !routineUpdateRequest.renewalInterval().equals(currentRoutine.getRenewalInterval())) {
+            currentRoutine.setRenewalInterval(routineUpdateRequest.renewalInterval());
+            changes = true;
+        }
+
+        if (!changes) {
+            throw new RequestValidationException("No data changes found");
+        }
+
+        return routineRepository.save(currentRoutine);
     }
 
     public Routine executeRoutine(Long routineId) {
