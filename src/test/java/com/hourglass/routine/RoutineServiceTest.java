@@ -9,6 +9,8 @@ import com.hourglass.user.UserService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.ArgumentCaptor;
+import org.mockito.Captor;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.security.access.AccessDeniedException;
@@ -33,6 +35,8 @@ class RoutineServiceTest {
     @Mock
     private RoutineRepository routineRepository;
     private RoutineService underTest;
+    @Captor
+    private ArgumentCaptor<Routine> routineCaptor;
 
     @BeforeEach
     void setUp() {
@@ -65,30 +69,29 @@ class RoutineServiceTest {
     void createRoutine() {
         // Given
         User user = mock(User.class);
-
         RoutineCreationRequest request = new RoutineCreationRequest(
                 "New Routine",
                 LocalDateTime.now(),
                 new TimeInterval(0, 0, 1, 0, 0, 0)
         );
 
-        Routine routine = new Routine(
-                request.name(),
-                request.startDateTime(),
-                request.renewalInterval(),
-                user
-        );
-
         // When
         when(userService.getCurrentUser()).thenReturn(user);
-        when(routineRepository.save(routine)).thenReturn(routine);
+        when(routineRepository.save(any(Routine.class))).thenAnswer(invocation -> invocation.getArgument(0));
 
         Routine actual = underTest.createRoutine(request);
 
         // Then
-        assertThat(actual).isEqualTo(routine);
         verify(userService).getCurrentUser();
-        verify(routineRepository).save(routine);
+        verify(routineRepository).save(routineCaptor.capture());
+
+        Routine capturedRoutine = routineCaptor.getValue();
+        assertThat(capturedRoutine.getName()).isEqualTo(request.name());
+        assertThat(capturedRoutine.getStartDateTime()).isEqualTo(request.startDateTime());
+        assertThat(capturedRoutine.getRenewalInterval()).isEqualTo(request.renewalInterval());
+        assertThat(capturedRoutine.getUser()).isEqualTo(user);
+
+        assertThat(actual).isEqualTo(capturedRoutine);
     }
 
 
